@@ -29,7 +29,9 @@ export default function Navbar() {
     localStorage.removeItem('userToken');
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
-    window.location.href = '/login'; 
+    
+    // 👇 التعديل السحري هنا: شيلنا الـ window.location واستخدمنا الـ navigate بتاعة الـ React
+    navigate('/login'); 
   }
 
   return (

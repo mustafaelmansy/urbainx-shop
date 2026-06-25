@@ -48,9 +48,7 @@ function App() {
   <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
   
   <Route path="/product/:id" element={<ProductDetails />} />
-  <Route path="*" element={<Navigate replace to="/" />} />
-  <Route path="*" element={<Navigate to="/login" />} />
-</Routes>
+  <Route path="*" element={<Navigate replace to="/login" />} />
         </main>
       </div>
     </BrowserRouter>
