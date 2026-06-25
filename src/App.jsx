@@ -38,18 +38,20 @@ function App() {
         <Navbar />
         <main>
           <Routes>
-  <Route path="/" element={<Home />} />
-  
-  {/* شيلنا الـ AuthRoute من هنا عشان يفتحوا معاك صريح وقت الـ Logout */}
-  <Route path="/login" element={<Login />} />
-  <Route path="/register" element={<Register />} />
-  
-  {/* صفحة الكارت بتفضل محمية زي ما هي بالـ ProtectedRoute */}
-  <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
-  
-  <Route path="/product/:id" element={<ProductDetails />} />
-  <Route path="*" element={<Navigate to="/login" />} />
-</Routes>
+            {/* 1. الـ Home بقى محمي.. لو مش مسجل دخول، هيتحول تلقائي لـ /login */}
+            <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            
+            {/* 2. الـ Login والـ Register محميين بـ AuthRoute.. لو مسجل دخول يطرده للهوم، ولو مش مسجل يفتحوا عادي */}
+            <Route path="/login" element={<AuthRoute><Login /></AuthRoute>} />
+            <Route path="/register" element={<AuthRoute><Register /></AuthRoute>} />
+            
+            {/* 3. باقي الصفحات زي ما هي */}
+            <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            
+            {/* 4. أي باص ضايع يرميه على الـ login */}
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
         </main>
       </div>
     </BrowserRouter>
