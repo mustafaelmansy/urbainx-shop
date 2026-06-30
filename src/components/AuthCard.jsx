@@ -2,7 +2,7 @@ export default function AuthCard({ title, subtitle, status, children, footer }) 
   return (
     <div className="rounded-[32px] bg-white p-8 shadow-[0_30px_70px_rgba(15,23,42,0.08)] sm:p-10">
       <div className="mb-8">
-        <div className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-600">FreshCart</div>
+        <div className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-600">DR SAMI ABU NASER</div>
         <h2 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900">{title}</h2>
         <p className="mt-3 text-sm leading-6 text-slate-600">{subtitle}</p>
       </div>

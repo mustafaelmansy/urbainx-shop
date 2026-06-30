@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { getCategories, getProducts } from '../api/api'
 import ProductCard from '../components/ProductCard'
@@ -9,6 +9,7 @@ const fallbackCategories = [
 ]
 
 export default function Home() {
+  const productsRef = useRef(null)
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
   const [loadingCategories, setLoadingCategories] = useState(true)
@@ -50,11 +51,15 @@ export default function Home() {
           <div className="absolute inset-0 opacity-80" style={{ backgroundImage: 'url(/hero.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} />
           <div className="relative z-10 grid gap-6 p-8 md:grid-cols-[1fr_auto] md:items-center">
             <div className="max-w-2xl">
-              <h1 className="text-4xl font-bold">Fresh Products Delivered to your Door</h1>
+              <h1 className="text-4xl font-bold">DR SAMI ABU NASER Products Delivered to your Door</h1>
               <p className="mt-3 text-lg">Get 20% off your first order</p>
               <div className="mt-5 flex gap-4">
-                <button className="rounded-full bg-white px-6 py-3 text-emerald-600">Shop Now</button>
-                <button className="rounded-full border border-white px-5 py-3">View Deals</button>
+<button
+  onClick={() => productsRef.current?.scrollIntoView({ behavior: 'smooth' })}
+  className="rounded-full bg-white px-6 py-3 text-emerald-600"
+>
+  Shop Now
+</button>                <button className="rounded-full border border-white px-5 py-3">View Deals</button>
               </div>
             </div>
             <div className="hidden md:block">
@@ -99,7 +104,7 @@ export default function Home() {
           <div className="mt-6 flex items-end gap-4">
             <div className="text-3xl font-bold">40% OFF</div>
             <div className="ml-auto">
-              <button className="rounded-full bg-white px-6 py-3 text-emerald-600">Shop Now →</button>
+              <button className="rounded-full bg-white px-6 py-3 text-emerald-600">Avaliable Soon</button>
             </div>
           </div>
         </div>
@@ -110,14 +115,14 @@ export default function Home() {
           <div className="mt-6 flex items-end gap-4">
             <div className="text-3xl font-bold">25% OFF</div>
             <div className="ml-auto">
-              <button className="rounded-full bg-white px-6 py-3 text-orange-600">Explore Now →</button>
+              <button className="rounded-full bg-white px-6 py-3 text-orange-600">Avaliable Soon </button>
             </div>
           </div>
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="my-12">
+      <section className="my-12" ref={productsRef}>
         <div className="mb-6 flex items-center justify-between">
           <h2 className="flex items-center gap-3 text-2xl font-semibold text-slate-900"><span className="h-8 w-1 rounded bg-emerald-600"/>Featured Products</h2>
         </div>

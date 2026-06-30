@@ -18,7 +18,9 @@ export default function ProductCard({ product }) {
   const { addToCart } = useCart()
   const [addStatus, setAddStatus] = useState('idle')
   const timeoutRef = useRef(null)
-  const img = product.image || product.images?.[0] || '/placeholder.png'
+
+  // 1. تحديث الـ Fallback Chain ليشمل imageCover
+  const img = product.image || product.imageCover || product.images?.[0] || '/placeholder.png'
   const category = product.category?.name || product.category || 'Category'
   const title = product.title || product.name || 'Product'
   const price = product.price ? `${product.price} EGP` : '—'
@@ -62,7 +64,16 @@ export default function ProductCard({ product }) {
 
       <Link to={`/product/${product.id || product._id || product.slug || ''}`} className="mx-auto mb-3 w-full no-underline">
         <div className="aspect-square flex items-center justify-center rounded-xl bg-slate-50 p-4">
-          <img src={img} alt={title} className="max-h-full max-w-full object-contain" />
+          {/* 2. إضافة onError لمنع الصور المكسورة نهائياً */}
+          <img 
+            src={img} 
+            alt={title} 
+            className="max-h-full max-w-full object-contain" 
+            onError={(e) => {
+              e.target.onerror = null; // يمنع الدخول في loop لا نهائي لو الصورة البديلة مكسورة أيضاً
+              e.target.src = '/placeholder.png';
+            }}
+          />
         </div>
       </Link>
 

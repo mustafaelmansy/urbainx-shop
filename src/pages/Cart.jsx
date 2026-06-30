@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
+
 function formatPrice(value) {
     
   return `${Number(value || 0).toLocaleString()} EGP`
@@ -135,10 +136,12 @@ export default function Cart() {
                 </div>
               </div>
 
-              <button className="w-full rounded-3xl bg-emerald-600 px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-emerald-700">
-                🔒 Secure Checkout
-              </button>
-
+              <Link
+  to="/checkout"
+  className="w-full rounded-3xl bg-emerald-600 px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-emerald-700 text-center block"
+>
+  🔒 Secure Checkout
+</Link>
               <div className="grid gap-3 text-sm text-slate-500">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">💳</span>

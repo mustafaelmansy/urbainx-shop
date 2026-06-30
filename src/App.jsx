@@ -5,6 +5,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import ProductDetails from './pages/ProductDetails'
 import Cart from './pages/Cart'
+import Checkout from './pages/Checkout'
+
 
 // 🔐 1. كومبوننت لحماية الصفحات اللي محتاجة تسجيل دخول (زي الكارت)
 function ProtectedRoute({ children }) {
@@ -48,6 +50,8 @@ function App() {
             {/* 3. باقي الصفحات زي ما هي */}
             <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
             <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/checkout" element={<Checkout />} />
+
             
             {/* 4. أي باص ضايع يرميه على الـ login */}
             <Route path="*" element={<Navigate to="/login" replace />} />
