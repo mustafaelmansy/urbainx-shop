@@ -31,82 +31,111 @@ export default function Cart() {
 
       <div className="grid gap-8 xl:grid-cols-[1.8fr_1fr]">
         <div className="space-y-4">
-          {cartItems.map((item) => {
-            const product = item.product || item
-            const quantity = item.count ?? item.quantity ?? 1
-            const price = item.price ?? 0
-            const itemTotal = price * quantity
-            
-            // 1. الـ Base URL المظبوط والصحيح لصور السيرفر عندك
-            const IMAGE_BASE_URL = 'https://ecommerce.routemisr.com/Route-Academy-products/'
-            
-            // 2. فحص عميق وشامل لكل الخصائص الممكنة للصورة لضمان لقطها فوراً
-            const possibleImage = 
-              product?.imageCover || 
-              product?.image || 
-              item?.imageCover || 
-              item?.image || 
-              (product?.images && product.images[0])
+         {cartItems.map((item) => {
+  const product = item.product || item
+  const quantity = item.count ?? item.quantity ?? 1
+  const price = item.price ?? 0
+  const itemTotal = price * quantity
 
-            // 3. بناء الرابط والتحقق إذا كان كاملاً أو يحتاج دمج الـ Base URL
-            let image = 'https://placehold.co/150'
-            
-            if (possibleImage && typeof possibleImage === 'string') {
-              const trimmed = possibleImage.trim()
-              if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-                image = trimmed
-              } else {
-                const cleanPath = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed
-                image = `${IMAGE_BASE_URL}${cleanPath}`
-              }
-            }
+  const IMAGE_BASE_URL = 'https://ecommerce.routemisr.com/Route-Academy-products/'
 
-            const category = product?.category?.name || product?.category || "Women's Fashion"
-            const sku = product?.sku || product?._id?.slice(-6).toUpperCase() || 'SKU-0000'
+  const possibleImage =
+    product?.imageCover ||
+    product?.image ||
+    item?.imageCover ||
+    item?.image ||
+    (product?.images && product.images[0])
 
-            return (
-              <div key={item._id || product._id || product.id || sku} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="grid gap-4 lg:grid-cols-[120px_1fr_auto] lg:items-center">
-                  <div className="flex flex-col items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                    {/* 🎯 التعديل السحري هنا: إضافة الـ key المستند على رابط الصورة لمنع التعليق */}
-                    <img 
-                      key={image}
-                      src={image} 
-                      alt={product?.name || product?.title} 
-                      className="h-24 w-24 object-contain" 
-                      loading="lazy"
-                    />
-                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">In Stock</span>
-                  </div>
+  let image = 'https://placehold.co/150'
 
-                  <div className="space-y-3">
-                    <div className="text-sm text-slate-500">{category}</div>
-                    <h2 className="text-base font-semibold text-slate-900">{product?.name || product?.title}</h2>
-                    <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                      <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700">{category}</span>
-                      <span>SKU: {sku}</span>
-                    </div>
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:pr-4">
-                      <div className="text-sm font-semibold text-slate-900">{formatPrice(price)} per unit</div>
-                      <span className="text-sm font-medium text-slate-600">Qty: {quantity}</span>
-                    </div>
-                  </div>
+  if (possibleImage && typeof possibleImage === 'string') {
+    const trimmed = possibleImage.trim()
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      image = trimmed
+    } else {
+      const cleanPath = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed
+      image = `${IMAGE_BASE_URL}${cleanPath}`
+    }
+  }
 
-                  <div className="space-y-3 text-right">
-                    <div className="text-sm text-slate-500">Total</div>
-                    <div className="text-lg font-semibold text-slate-900">{formatPrice(itemTotal)}</div>
-                    <button
-                      className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-rose-200 bg-rose-50 text-sm font-semibold text-rose-700 transition hover:bg-rose-100"
-                      onClick={() => removeItem(product._id || product.id)}
-                      title="Remove from cart"
-                    >
-                      🗑
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
+  const category = product?.category?.name || product?.category || "Women's Fashion"
+  const sku = product?.sku || product?._id?.slice(-6).toUpperCase() || 'SKU-0000'
+  const productId = product?._id || product?.id
+  console.log(productId)
+
+  return (
+    <div
+      key={item._id || product._id || product.id || sku}
+      className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm"
+    >
+      <div className="grid gap-4 lg:grid-cols-[120px_1fr_auto] lg:items-center">
+
+        <div className="flex flex-col items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4">
+          <Link to={`/product/${productId}`}>
+            <img
+              key={image}
+              src={image}
+              alt={product?.name || product?.title}
+              className="h-24 w-24 cursor-pointer object-contain"
+              loading="lazy"
+            />
+          </Link>
+
+          <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+            In Stock
+          </span>
+        </div>
+
+        <div className="space-y-3">
+          <div className="text-sm text-slate-500">{category}</div>
+
+          <Link
+            to={`/product/${productId}`}
+            className="hover:text-emerald-600 transition"
+          >
+            <h2 className="text-base font-semibold text-slate-900">
+              {product?.name || product?.title}
+            </h2>
+          </Link>
+
+          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+            <span className="rounded-full bg-emerald-50 px-2 py-1 text-emerald-700">
+              {category}
+            </span>
+            <span>SKU: {sku}</span>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:pr-4">
+            <div className="text-sm font-semibold text-slate-900">
+              {formatPrice(price)} per unit
+            </div>
+
+            <span className="text-sm font-medium text-slate-600">
+              Qty: {quantity}
+            </span>
+          </div>
+        </div>
+
+        <div className="space-y-3 text-right">
+          <div className="text-sm text-slate-500">Total</div>
+
+          <div className="text-lg font-semibold text-slate-900">
+            {formatPrice(itemTotal)}
+          </div>
+
+          <button
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-rose-200 bg-rose-50 text-sm font-semibold text-rose-700 transition hover:bg-rose-100"
+            onClick={() => removeItem(product._id || product.id)}
+            title="Remove from cart"
+          >
+            🗑
+          </button>
+        </div>
+
+      </div>
+    </div>
+  )
+})}
 
           <div className="flex flex-col gap-3 border-t border-slate-200 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <Link to="/" className="text-sm font-semibold text-emerald-600 hover:underline">← Continue Shopping</Link>
