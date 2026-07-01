@@ -30,12 +30,12 @@ export default function Navbar() {
     localStorage.removeItem('token');
     localStorage.removeItem('userName');
     
-    // 👇 التعديل السحري هنا: شيلنا الـ window.location واستخدمنا الـ navigate بتاعة الـ React
     navigate('/login'); 
   }
 
   return (
     <header className="sticky top-0 z-30 bg-white shadow-sm">
+      {/* الشريط العلوي الأخضر */}
       <div className="border-b border-slate-100 bg-emerald-50 text-emerald-700">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 text-sm sm:px-6 lg:px-8">
           <div className="flex items-center gap-6">
@@ -63,10 +63,11 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* الشريط الرئيسي (اللوجو والأزرار) */}
       <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between">
           
-          {/* 1. 🆕 تم تغيير اسم اللوجو والـ Brand إلى Urbainx shop مع تعديل الحرف الأول لـ U */}
+          {/* اللوجو */}
           <Link to="/" className="flex items-center gap-2 text-emerald-600 shrink-0">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-100 text-xl font-bold text-emerald-700">U</div>
             <div>
@@ -74,21 +75,12 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <div className="flex-1 max-w-2xl">
-            <div className="relative">
-              <input
-                className="w-full rounded-full border border-slate-200 bg-white px-4 py-2.5 pr-14 text-sm placeholder-slate-400 focus:outline-none focus:border-emerald-500"
-                placeholder="Search for products, brands and more..."
-              />
-              <button className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-emerald-600 px-3 py-1.5 text-white text-xs">🔍</button>
-            </div>
-          </div>
+          {/* 🛠️ تم حذف الـ Search Bar بالكامل من هنا ليكون الـ Navbar بسيط وسريع */}
 
-          {/* 2. 🛠️ الحل السحري: شيلنا الـ hidden md:flex وخليناها flex على طول علشان الأيكونات تظهر في الموبايل والماك والشاشات الصغيرة */}
+          {/* الأيقونات والأزرار الجانبية */}
           <div className="flex items-center gap-2 sm:gap-4 text-slate-600 shrink-0">
             <button className="rounded-full p-2 hover:bg-slate-50 hidden xs:block">♡</button>
             
-            {/* أيكونة الكارت الحالية بقت مرئية دائماً وفيها الـ Badge المظبوط بالعدد */}
             <Link to="/cart" className="relative inline-flex rounded-full p-2 hover:bg-slate-50">
               <span className="text-xl">🛒</span>
               {totalItems > 0 && (
@@ -100,7 +92,7 @@ export default function Navbar() {
             
             <button className="rounded-full p-2 hover:bg-slate-50 hidden xs:block">👤</button>
             
-            {/* زرار المنيو للموبايل فقط */}
+            {/* زرار المنيو للموبايل */}
             <button className="md:hidden inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700" onClick={() => setOpen((p) => !p)}>
               {open ? 'Close' : 'Menu'}
             </button>
@@ -109,6 +101,7 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* قائمة المنيو للموبايل عند الضغط على Menu */}
       {open && (
         <div className="border-t border-slate-200 bg-white px-4 py-5 md:hidden">
           <nav className="space-y-3">
