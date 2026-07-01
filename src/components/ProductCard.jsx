@@ -19,7 +19,7 @@ export default function ProductCard({ product }) {
   const [addStatus, setAddStatus] = useState('idle')
   const timeoutRef = useRef(null)
 
-  // Fallback chain (أهم جزء!) - تعديل لتشمل imageCover
+  // الـ Fallback Chain المعدل
   const img = product.image || product.imageCover || product.images?.[0] || '/placeholder.png'
   const category = product.category?.name || product.category || 'Category'
   const title = product.title || product.name || 'Product'
@@ -64,14 +64,15 @@ export default function ProductCard({ product }) {
 
       <Link to={`/product/${product.id || product._id || product.slug || ''}`} className="mx-auto mb-3 w-full no-underline">
         <div className="aspect-square flex items-center justify-center rounded-xl bg-slate-50 p-4">
+          {/* إضافة الـ key الديناميكي هنا أيضاً */}
           <img 
+            key={img}
             src={img} 
             alt={title} 
             className="max-h-full max-w-full object-contain" 
-            // onError handler (حماية من الصور المكسورة)
             onError={(e) => {
               e.target.onerror = null; 
-              e.target.src = '/placeholder.png'; // الصورة البديلة
+              e.target.src = '/placeholder.png';
             }}
           />
         </div>

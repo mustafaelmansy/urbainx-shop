@@ -46,7 +46,10 @@ export function CartProvider({ children }) {
   }
 
   const fetchCart = async () => {
-    setLoading(true)
+    // 💡 التعديل هنا: لو الكارت فيه داتا وجاهز، مش هنقفل الـ UI بـ loading شاشة كاملة
+    if (cartItems.length === 0) {
+      setLoading(true)
+    }
     setError(null)
     const headersConfig = getHeaders()
     if (!headersConfig) {
@@ -75,33 +78,39 @@ export function CartProvider({ children }) {
   }
 
   const addToCart = async (productId, count = 1) => {
-    if (!productId) return null
-    const headersConfig = getHeaders()
-    if (!headersConfig) {
-      console.error('Add to cart failed: missing auth token. Please log in first.')
-      setError(new Error('Authentication required'))
-      return null
+  if (!productId) return null
+
+  const headersConfig = getHeaders()
+  if (!headersConfig) {
+    console.error('Add to cart failed: missing auth token. Please log in first.')
+    setError(new Error('Authentication required'))
+    return null
+  }
+
+  setLoading(true)
+
+  try {
+    const res = await client.post('/cart', { productId, count }, headersConfig)
+
+    const success =
+      res?.status === 200 ||
+      res?.status === 201 ||
+      res?.data?.status === 'success'
+
+    if (success) {
+      await fetchCart()
+      return res?.data
     }
 
-    setLoading(true)
-    try {
-      const res = await client.post('/cart', { productId, count }, headersConfig)
-      const success = res?.status === 200 || res?.status === 201 || res?.data?.status === 'success'
-      if (success) {
-        const cartData = res?.data?.data || {}
-        setCartItems(normalizeCartItems(cartData))
-        setTotalCartPrice(cartData?.totalCartPrice ?? 0)
-        return res?.data
-      }
-      setError(new Error('Add to cart request failed'))
-      return null
-    } catch (err) {
-      setError(err)
-      return null
-    } finally {
-      setLoading(false)
-    }
+    setError(new Error('Add to cart request failed'))
+    return null
+  } catch (err) {
+    setError(err)
+    return null
+  } finally {
+    setLoading(false)
   }
+}
 
   const updateQuantity = async (cartItemId, count) => {
     if (!cartItemId) return null

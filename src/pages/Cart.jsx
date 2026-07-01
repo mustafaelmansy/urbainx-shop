@@ -1,16 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 
-
 function formatPrice(value) {
-    
   return `${Number(value || 0).toLocaleString()} EGP`
 }
 
 export default function Cart() {
-  const { cartItems, loading, error, totalItems, totalCartPrice, removeItem, clearCart } = useCart()
+  const { cartItems, loading, initialized, error, totalItems, totalCartPrice, removeItem, clearCart } = useCart()
 
-  if (loading) {
+  if (!initialized && loading) {
     return <div className="flex h-screen items-center justify-center text-emerald-600 font-semibold">Loading Cart...</div>
   }
 
@@ -38,7 +36,31 @@ export default function Cart() {
             const quantity = item.count ?? item.quantity ?? 1
             const price = item.price ?? 0
             const itemTotal = price * quantity
-            const image = product?.image || product?.imageCover || product?.images?.[0] || '/placeholder.png'
+            
+            // 1. الـ Base URL المظبوط والصحيح لصور السيرفر عندك
+            const IMAGE_BASE_URL = 'https://ecommerce.routemisr.com/Route-Academy-products/'
+            
+            // 2. فحص عميق وشامل لكل الخصائص الممكنة للصورة لضمان لقطها فوراً
+            const possibleImage = 
+              product?.imageCover || 
+              product?.image || 
+              item?.imageCover || 
+              item?.image || 
+              (product?.images && product.images[0])
+
+            // 3. بناء الرابط والتحقق إذا كان كاملاً أو يحتاج دمج الـ Base URL
+            let image = 'https://placehold.co/150'
+            
+            if (possibleImage && typeof possibleImage === 'string') {
+              const trimmed = possibleImage.trim()
+              if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+                image = trimmed
+              } else {
+                const cleanPath = trimmed.startsWith('/') ? trimmed.slice(1) : trimmed
+                image = `${IMAGE_BASE_URL}${cleanPath}`
+              }
+            }
+
             const category = product?.category?.name || product?.category || "Women's Fashion"
             const sku = product?.sku || product?._id?.slice(-6).toUpperCase() || 'SKU-0000'
 
@@ -46,7 +68,14 @@ export default function Cart() {
               <div key={item._id || product._id || product.id || sku} className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
                 <div className="grid gap-4 lg:grid-cols-[120px_1fr_auto] lg:items-center">
                   <div className="flex flex-col items-center gap-3 rounded-3xl border border-slate-200 bg-slate-50 p-4">
-                    <img src={image} alt={product?.name || product?.title} className="h-24 w-24 object-contain" />
+                    {/* 🎯 التعديل السحري هنا: إضافة الـ key المستند على رابط الصورة لمنع التعليق */}
+                    <img 
+                      key={image}
+                      src={image} 
+                      alt={product?.name || product?.title} 
+                      className="h-24 w-24 object-contain" 
+                      loading="lazy"
+                    />
                     <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">In Stock</span>
                   </div>
 
@@ -137,11 +166,11 @@ export default function Cart() {
               </div>
 
               <Link
-  to="/checkout"
-  className="w-full rounded-3xl bg-emerald-600 px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-emerald-700 text-center block"
->
-  🔒 Secure Checkout
-</Link>
+                to="/checkout"
+                className="w-full rounded-3xl bg-emerald-600 px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-sm transition hover:bg-emerald-700 text-center block"
+              >
+                🔒 Secure Checkout
+              </Link>
               <div className="grid gap-3 text-sm text-slate-500">
                 <div className="flex items-center gap-2">
                   <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700">💳</span>
